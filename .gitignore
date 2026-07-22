@@ -1,3 +1,12 @@
+# data & artifacts — never commit these
+UCI HAR Dataset/
+data/
+model_out/
+*.pt
+*.tar.gz
+
+# AWS
+.aws-sam/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
