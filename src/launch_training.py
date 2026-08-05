@@ -17,6 +17,7 @@ estimator = PyTorch(
         {"Name": "train_loss", "Regex": r"train_loss=([0-9.]+)"},
         {"Name": "test_acc",   "Regex": r"test_acc=([0-9.]+)"},
     ],
+    output_path="s3://gaurav-mlops-us-west-2/har/artifacts/",
 )
 
 estimator.fit({
