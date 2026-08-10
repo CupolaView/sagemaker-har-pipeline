@@ -1,5 +1,6 @@
 # data & artifacts — never commit these
 UCI HAR Dataset/
+processed/
 data/
 model_out/
 *.pt
