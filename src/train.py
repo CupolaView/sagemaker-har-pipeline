@@ -25,12 +25,21 @@ SIGNALS = [
 
 
 def load_har_split(split_dir: Path, split: str):
-    """Stack the 9 signal files -> (N, 9, 128); labels 1-6 -> 0-5."""
-    sig_dir = split_dir / "Inertial Signals"
-    X = np.stack(
-        [np.loadtxt(sig_dir / f"{s}_{split}.txt") for s in SIGNALS], axis=1
-    ).astype(np.float32)
-    y = np.loadtxt(split_dir / f"y_{split}.txt").astype(np.int64) - 1
+    """Load a data split. Prefers preprocessed .npy (output of preprocess.py);
+    falls back to raw UCI txt so local dry-runs against the raw download
+    still work. Labels arrive 0-5 in npy, 1-6 in raw."""
+    npy = split_dir / "X.npy"
+    if npy.exists():
+        X = np.load(npy).astype(np.float32)
+        y = np.load(split_dir / "y.npy").astype(np.int64)
+        print(f"loaded preprocessed npy from {split_dir}")
+    else:
+        sig_dir = split_dir / "Inertial Signals"
+        X = np.stack(
+            [np.loadtxt(sig_dir / f"{s}_{split}.txt") for s in SIGNALS], axis=1
+        ).astype(np.float32)
+        y = np.loadtxt(split_dir / f"y_{split}.txt").astype(np.int64) - 1
+        print(f"loaded raw txt from {split_dir}")
     return torch.from_numpy(X), torch.from_numpy(y)
 
 

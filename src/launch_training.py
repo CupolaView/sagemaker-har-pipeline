@@ -21,6 +21,6 @@ estimator = PyTorch(
 )
 
 estimator.fit({
-    "train": "s3://gaurav-mlops-us-west-2/har/data/v1/train/",
-    "test":  "s3://gaurav-mlops-us-west-2/har/data/v1/test/",
+    "train": "s3://gaurav-mlops-us-west-2/har/data/v1-processed/train/",
+    "test":  "s3://gaurav-mlops-us-west-2/har/data/v1-processed/test/",
 })
