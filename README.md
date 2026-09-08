@@ -1,6 +1,13 @@
 # sagemaker-har-pipeline
 A Sagemaker Pipeline for UCL HAR dataset classification
 
+## Pipeline
+
+Raw data (S3, versioned) → Processing job (`src/preprocess.py`) →
+Training job (`src/train.py`) → HPO (`src/launch_hpo.py`, see `docs/hpo.md`) →
+Model Registry with manual approval gate (`src/register_model.py`,
+`src/approve_model.py`) → [endpoint — coming next]
+
 # Data Versioning 
 
 ## Layout
