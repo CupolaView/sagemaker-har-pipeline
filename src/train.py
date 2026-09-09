@@ -16,6 +16,8 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, TensorDataset
 
+from model import HARConvNet
+
 # UCI HAR raw signals: 9 channels x 128 timesteps, 6 activity classes
 SIGNALS = [
     "body_acc_x", "body_acc_y", "body_acc_z",
@@ -41,25 +43,6 @@ def load_har_split(split_dir: Path, split: str):
         y = np.loadtxt(split_dir / f"y_{split}.txt").astype(np.int64) - 1
         print(f"loaded raw txt from {split_dir}")
     return torch.from_numpy(X), torch.from_numpy(y)
-
-
-class HARConvNet(nn.Module):
-    """Small 1D CNN — deliberately simple; the pipeline is the deliverable."""
-
-    def __init__(self, n_channels=9, n_classes=6):
-        super().__init__()
-        self.features = nn.Sequential(
-            nn.Conv1d(n_channels, 64, kernel_size=5, padding=2),
-            nn.ReLU(),
-            nn.MaxPool1d(2),
-            nn.Conv1d(64, 128, kernel_size=5, padding=2),
-            nn.ReLU(),
-            nn.AdaptiveAvgPool1d(1),
-        )
-        self.classifier = nn.Linear(128, n_classes)
-
-    def forward(self, x):
-        return self.classifier(self.features(x).squeeze(-1))
 
 
 def evaluate(model, loader, device):
