@@ -4,7 +4,7 @@ The governance loop closes here: this script refuses to deploy anything
 that hasn't passed the registry's approval gate. No hardcoded artifacts.
 
 Run:      python src/deploy_endpoint.py
-Cost:     ml.m5.large endpoint ≈ $0.13/hr WHILE RUNNING — tear down after
+Cost:     ml.m5.large endpoint $0.115/hr (~$84/month) WHILE RUNNING — tear down after
           each session:  aws sagemaker delete-endpoint --endpoint-name har-classifier
 """
 import boto3
@@ -33,6 +33,14 @@ pkg = sm.describe_model_package(ModelPackageName=approved[0]["ModelPackageArn"])
 model_data = pkg["InferenceSpecification"]["Containers"][0]["ModelDataUrl"]
 print(f"deploying package: {approved[0]['ModelPackageArn']}")
 print(f"artifact: {model_data}")
+
+# --- 1b. remove stale endpoint-config from a previous deploy/teardown cycle
+#         (delete-endpoint leaves the config behind; same-name create collides) ---
+try:
+    sm.delete_endpoint_config(EndpointConfigName=ENDPOINT_NAME)
+    print(f"deleted stale endpoint-config '{ENDPOINT_NAME}'")
+except sm.exceptions.ClientError:
+    pass  # none existed — normal on first deploy
 
 # --- 2. wrap artifact + inference code and deploy ---
 model = PyTorchModel(
