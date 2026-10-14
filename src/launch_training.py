@@ -2,7 +2,8 @@ import sagemaker
 from sagemaker.pytorch import PyTorch
 
 sess = sagemaker.Session()
-role = "arn:aws:iam::674224408819:role/service-role/AmazonSageMaker-ExecutionRole-20260609T145595"#sagemaker.get_execution_role()  # inside Studio; else paste the role ARN
+# Inside SageMaker Studio you could use sagemaker.get_execution_role() instead.
+role = "arn:aws:iam::674224408819:role/service-role/AmazonSageMaker-ExecutionRole-20260609T145595"
 
 estimator = PyTorch(
     entry_point="train.py",

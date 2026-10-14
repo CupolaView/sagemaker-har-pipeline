@@ -9,9 +9,9 @@ Cost: 8 jobs x ~10-15 min on ml.m5.large ≈ < $2 total.
 """
 from sagemaker.pytorch import PyTorch
 from sagemaker.tuner import (
-    HyperparameterTuner,
-    ContinuousParameter,
     CategoricalParameter,
+    ContinuousParameter,
+    HyperparameterTuner,
 )
 
 ROLE = "arn:aws:iam::674224408819:role/service-role/AmazonSageMaker-ExecutionRole-20260609T145595"

@@ -1,5 +1,5 @@
-from sagemaker.sklearn.processing import SKLearnProcessor
 from sagemaker.processing import ProcessingInput, ProcessingOutput
+from sagemaker.sklearn.processing import SKLearnProcessor
 
 role = "arn:aws:iam::674224408819:role/service-role/AmazonSageMaker-ExecutionRole-20260609T145595"
 

@@ -17,7 +17,7 @@ import json
 import torch
 import torch.nn.functional as F
 
-from model import HARConvNet, ACTIVITY_LABELS
+from model import ACTIVITY_LABELS, HARConvNet
 
 
 def model_fn(model_dir):
