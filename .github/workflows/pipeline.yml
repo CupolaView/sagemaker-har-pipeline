@@ -1,0 +1,49 @@
+# CD: run the SageMaker pipeline on demand from the GitHub Actions tab.
+# Auth is OIDC: GitHub proves its identity to AWS and receives temporary
+# credentials for the role in infra/. No AWS keys are stored in GitHub.
+name: Run SageMaker pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      stage:
+        description: "Which stage to run"
+        type: choice
+        options: [processing+training, processing, training]
+        default: processing+training
+
+permissions:
+  id-token: write   # lets the job request the OIDC token
+  contents: read
+
+jobs:
+  tests:
+    # Reuse CI: never launch paid AWS jobs from code that fails its tests.
+    uses: ./.github/workflows/ci.yml
+
+  run:
+    needs: tests
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'   # the IAM trust policy only allows main anyway
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: us-west-2
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install SageMaker SDK
+        run: pip install "sagemaker<3"   # 3.x reorganized the modules these scripts use
+
+      - name: Processing job
+        if: contains(inputs.stage, 'processing')
+        run: python src/launch_processing.py
+
+      - name: Training job
+        if: contains(inputs.stage, 'training')
+        run: python src/launch_training.py

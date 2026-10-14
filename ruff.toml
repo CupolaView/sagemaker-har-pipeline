@@ -1,0 +1,8 @@
+# Pin the lint rules explicitly: newer ruff releases enable more rules by
+# default, and CI shouldn't start failing just because ruff updated.
+line-length = 110
+target-version = "py312"
+src = ["src", "tests"]   # so `from model import ...` is sorted as first-party
+
+[lint]
+select = ["E", "F", "I"]   # pycodestyle errors, pyflakes, import sorting

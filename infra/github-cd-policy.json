@@ -1,0 +1,49 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "LaunchAndWatchJobs",
+      "Effect": "Allow",
+      "Action": [
+        "sagemaker:CreateProcessingJob",
+        "sagemaker:DescribeProcessingJob",
+        "sagemaker:CreateTrainingJob",
+        "sagemaker:DescribeTrainingJob"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "HandExecutionRoleToSageMakerOnly",
+      "Effect": "Allow",
+      "Action": "iam:PassRole",
+      "Resource": "arn:aws:iam::674224408819:role/service-role/AmazonSageMaker-ExecutionRole-20260609T145595",
+      "Condition": {
+        "StringEquals": { "iam:PassedToService": "sagemaker.amazonaws.com" }
+      }
+    },
+    {
+      "Sid": "UploadSourceCodeToSdkDefaultBucket",
+      "Effect": "Allow",
+      "Action": [
+        "s3:CreateBucket",
+        "s3:GetBucketLocation",
+        "s3:ListBucket",
+        "s3:GetObject",
+        "s3:PutObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::sagemaker-us-west-2-674224408819",
+        "arn:aws:s3:::sagemaker-us-west-2-674224408819/*"
+      ]
+    },
+    {
+      "Sid": "StreamJobLogs",
+      "Effect": "Allow",
+      "Action": [
+        "logs:DescribeLogStreams",
+        "logs:GetLogEvents"
+      ],
+      "Resource": "arn:aws:logs:us-west-2:674224408819:log-group:/aws/sagemaker/*"
+    }
+  ]
+}
