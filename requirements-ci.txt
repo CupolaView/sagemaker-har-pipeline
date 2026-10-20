@@ -1,0 +1,5 @@
+# CI test dependencies. torch is installed separately in ci.yml from the
+# CPU-only index (much smaller download, and CI has no GPU).
+numpy
+pytest
+ruff==0.16.10   # pinned: new ruff releases change default rules
