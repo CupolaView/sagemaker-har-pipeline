@@ -28,24 +28,6 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      # TEMPORARY debug step: prints the identity claims GitHub sends to AWS,
-      # so they can be compared with infra/github-oidc-trust.json.
-      # Prints only the decoded claims, never the token itself. Remove once
-      # OIDC works.
-      - name: "Debug: show OIDC token claims"
-        run: |
-          TOKEN=$(curl -sS -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
-            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com" | jq -r .value)
-          python3 - "$TOKEN" <<'EOF'
-          import base64, json, sys
-          payload = sys.argv[1].split(".")[1]
-          payload += "=" * (-len(payload) % 4)
-          claims = json.loads(base64.urlsafe_b64decode(payload))
-          for k in ["sub", "aud", "repository", "ref", "event_name", "job_workflow_ref"]:
-              print(f"{k:<18} {claims.get(k)}")
-          EOF
-          echo "role ARN in use:  ${{ vars.AWS_ROLE_ARN }}"
-
       - uses: aws-actions/configure-aws-credentials@v5
         with:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}

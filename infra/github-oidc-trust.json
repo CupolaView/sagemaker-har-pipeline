@@ -11,7 +11,7 @@
       "Condition": {
         "StringEquals": {
           "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
-          "token.actions.githubusercontent.com:sub": "repo:CupolaView/sagemaker-har-pipeline:ref:refs/heads/main"
+          "token.actions.githubusercontent.com:sub": "repo:CupolaView@43252845/sagemaker-har-pipeline@1309229916:ref:refs/heads/main"
         }
       }
     }
