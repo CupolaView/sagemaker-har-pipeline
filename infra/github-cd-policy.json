@@ -18,7 +18,9 @@
       "Action": "iam:PassRole",
       "Resource": "arn:aws:iam::674224408819:role/service-role/AmazonSageMaker-ExecutionRole-20260609T145595",
       "Condition": {
-        "StringEquals": { "iam:PassedToService": "sagemaker.amazonaws.com" }
+        "StringEquals": {
+          "iam:PassedToService": "sagemaker.amazonaws.com"
+        }
       }
     },
     {
@@ -35,6 +37,12 @@
         "arn:aws:s3:::sagemaker-us-west-2-674224408819",
         "arn:aws:s3:::sagemaker-us-west-2-674224408819/*"
       ]
+    },
+    {
+      "Sid": "UploadTrainingCodeToProjectBucketCodePrefixOnly",
+      "Effect": "Allow",
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::gaurav-mlops-us-west-2/har/code/*"
     },
     {
       "Sid": "StreamJobLogs",
