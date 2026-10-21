@@ -3,6 +3,8 @@ UCI HAR Dataset/
 processed/
 data/
 model_out/
+reports/
+.idea/
 *.pt
 *.tar.gz
 
