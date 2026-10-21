@@ -19,6 +19,11 @@ estimator = PyTorch(
         {"Name": "test_acc",   "Regex": r"test_acc=([0-9.]+)"},
     ],
     output_path="s3://gaurav-mlops-us-west-2/har/artifacts/",
+    # Where the SDK uploads the zipped src/ before the job starts. Without
+    # this it defaults to the root of the output_path bucket; a dedicated
+    # prefix keeps the bucket tidy and lets the CI role's S3 permission
+    # cover just this prefix (infra/github-cd-policy.json).
+    code_location="s3://gaurav-mlops-us-west-2/har/code",
 )
 
 estimator.fit({
